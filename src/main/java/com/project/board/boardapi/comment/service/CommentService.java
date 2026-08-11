@@ -30,12 +30,12 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentCreateResponse create(Long memberId, CommentCreateRequest request) {
+    public CommentCreateResponse create(Long memberId, Long boardId, CommentCreateRequest request) {
         Member member = memberRepository.findByIdAndIsDeletedFalse(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
 
-        Board board = boardRepository.findByIdAndIsDeletedFalse(request.boardId())
-                .orElseThrow(() -> new BoardNotFoundException(request.boardId()));
+        Board board = boardRepository.findByIdAndIsDeletedFalse(boardId)
+                .orElseThrow(() -> new BoardNotFoundException(boardId));
 
         Comment saved = commentRepository.save(new Comment(request.content(), board, member));
         return new CommentCreateResponse(saved.getId());

@@ -11,7 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/comments")
+@RequestMapping("/api/boards/{boardId}/comments")
 public class CommentController {
     private final CommentService commentService;
     public CommentController(CommentService commentService){
@@ -21,9 +21,10 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<CommentCreateResponse> create(
             @AuthenticationPrincipal LoginMember loginMember,
+            @PathVariable Long boardId,
             @Valid @RequestBody CommentCreateRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(commentService.create(loginMember.memberId(), request));
+                .body(commentService.create(loginMember.memberId(), boardId, request));
     }
 
     @DeleteMapping("{id}")

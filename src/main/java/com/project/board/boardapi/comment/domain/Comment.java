@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = "comment")
 public class Comment extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,6 +18,15 @@ public class Comment extends BaseEntity {
     @Size(max = 200, message = "200자 이하만 가능")
     @NotBlank(message = "내용을 입력하셔야합니다.")
     private String content;
+
+    // 부모 댓글
+    // 일반 댓글이면 null, 대댓글이면 부모 Comment
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Comment parent;
+
+    @Column(nullable = false)
+    private int depth = 0;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "board_id")
@@ -26,24 +36,46 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    protected Comment(){}
+    protected Comment() {}
 
-    public Comment(String content, Board board, Member member){
+    // 일반 댓글
+    public Comment(String content, Board board, Member member) {
         this.content = content;
         this.board = board;
         this.member = member;
+        this.parent = null;
+        this.depth = 0;
     }
 
-    public Long getId(){
+    // 대댓글
+    public Comment(
+            String content,
+            Board board,
+            Member member,
+            Comment parent
+    ) {
+        if (parent.getDepth() != 0) {
+            throw new IllegalArgumentException(
+                    "대댓글에는 답글을 작성할 수 없습니다."
+            );
+        }
+
+        this.content = content;
+        this.board = board;
+        this.member = member;
+        this.parent = parent;
+        this.depth = 1;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public String getContent() {
-        return this.content;
+    public int getDepth() {
+        return depth;
     }
 
-
     public Member getMember() {
-        return this.member;
+        return member;
     }
 }

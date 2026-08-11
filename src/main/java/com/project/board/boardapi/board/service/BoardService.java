@@ -29,7 +29,7 @@ public class BoardService {
 
     @Transactional
     public BoardCreateResponse create(Long memberId, BoardCreateRequest request) {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByIdAndIsDeletedFalse(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
         Board saved = boardRepository.save(new Board(request.title(), request.content(), member));
         return new BoardCreateResponse(saved.getId());

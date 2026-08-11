@@ -18,7 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         Long memberId = Long.valueOf(username);
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByIdAndIsDeletedFalse(memberId)
                 .orElseThrow(() -> new UsernameNotFoundException("회원을 찾을 수 없습니다."));
         return new LoginMember(member.getId(), member.getEmail(), member.getName());
     }

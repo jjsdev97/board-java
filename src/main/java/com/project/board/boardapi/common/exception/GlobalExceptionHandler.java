@@ -3,6 +3,8 @@ package com.project.board.boardapi.common.exception;
 import com.project.board.boardapi.auth.exception.LoginFailedException;
 import com.project.board.boardapi.board.exception.BoardAccessDeniedException;
 import com.project.board.boardapi.board.exception.BoardNotFoundException;
+import com.project.board.boardapi.comment.exception.CommentAccessDeniedException;
+import com.project.board.boardapi.comment.exception.CommentNotFoundException;
 import com.project.board.boardapi.member.exception.DuplicateEmailException;
 import com.project.board.boardapi.member.exception.MemberNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +46,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BoardAccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleBoardAccessDenied(BoardAccessDeniedException e) {
         return buildDefaultResponseEntity(ErrorCode.BOARD_ACCESS_DENIED);
+    }
+
+    @ExceptionHandler(CommentNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCommentNotFound(CommentNotFoundException e){
+        return buildDefaultResponseEntity(ErrorCode.COMMENT_NOT_FOUND);
+    }
+
+    @ExceptionHandler(CommentAccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleCommentAccessDenied(CommentAccessDeniedException e) {
+        return buildDefaultResponseEntity(ErrorCode.COMMENT_ACCESS_DENIED);
     }
 
     private ResponseEntity<ErrorResponse> buildDefaultResponseEntity(ErrorCode errorCode) {

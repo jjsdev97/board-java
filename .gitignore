@@ -1,0 +1,39 @@
+# Gradle / Kotlin build output
+.gradle/
+.kotlin/
+build/
+out/
+
+# Keep the Gradle Wrapper in Git
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+!gradlew
+!gradlew.bat
+
+# IntelliJ IDEA and other IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.classpath
+.project
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+application-local.properties
+application-local.yml
+application-local.yaml
+application-secret.properties
+application-secret.yml
+application-secret.yaml
+
+# Logs
+*.log
+
+# OS-generated files
+.DS_Store
+Thumbs.db

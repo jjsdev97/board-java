@@ -3,7 +3,7 @@ package com.project.board.boardapi.board.dto;
 import java.util.List;
 
 public record BoardPageResponse(
-        List<BoardResponse> content,
+        List<BoardListResponse> content,
         int page,
         int size,
         long totalElements,
@@ -12,7 +12,7 @@ public record BoardPageResponse(
         boolean last
 ) {
     public static BoardPageResponse of(
-            List<BoardResponse> content,
+            List<BoardListResponse> content,
             int page,
             int size,
             long totalElements

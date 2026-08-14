@@ -10,7 +10,8 @@ public enum ErrorCode {
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "MEMBER_409", "이미 사용 중인 이메일입니다."),
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "AUTH_401", "이메일 또는 비밀번호가 올바르지 않습니다."),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT_404", "댓글을 찾을 수 없습니다."),
-    COMMENT_ACCESS_DENIED(HttpStatus.FORBIDDEN, "COMMENT_403", "댓글을 수정하거나 삭제할 권한이 없습니다.");
+    COMMENT_ACCESS_DENIED(HttpStatus.FORBIDDEN, "COMMENT_403", "댓글을 수정하거나 삭제할 권한이 없습니다."),
+    INVALID_COMMENT_PARENT(HttpStatus.BAD_REQUEST, "COMMENT_400", "대댓글에는 답글을 작성할 수 없습니다.");
 
 
     private final HttpStatus status;

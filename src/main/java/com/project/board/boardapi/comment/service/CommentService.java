@@ -10,6 +10,7 @@ import com.project.board.boardapi.comment.dto.CommentResponse;
 import com.project.board.boardapi.comment.dto.CommentUpdateRequest;
 import com.project.board.boardapi.comment.exception.CommentAccessDeniedException;
 import com.project.board.boardapi.comment.exception.CommentNotFoundException;
+import com.project.board.boardapi.comment.exception.InvalidCommentParentException;
 import com.project.board.boardapi.comment.repository.CommentRepository;
 import com.project.board.boardapi.member.domain.Member;
 import com.project.board.boardapi.member.exception.MemberNotFoundException;
@@ -38,8 +39,19 @@ public class CommentService {
         Board board = boardRepository.findByIdAndIsDeletedFalse(boardId)
                 .orElseThrow(() -> new BoardNotFoundException(boardId));
 
-        Comment saved = commentRepository.save(new Comment(request.content(), board, member));
+        Comment comment = request.parentId() == null
+                ? new Comment(request.content(), board, member)
+                : createReply(request.content(), board, member, request.parentId());
+
+        Comment saved = commentRepository.save(comment);
         return new CommentCreateResponse(saved.getId());
+    }
+
+    private Comment createReply(String content, Board board, Member member, Long parentId) {
+        Comment parent = this.getComment(parentId);
+        this.checkBoard(parent, board.getId());
+        if (parent.getDepth() != 0) throw new InvalidCommentParentException();
+        return new Comment(content, board, member, parent);
     }
 
     @Transactional

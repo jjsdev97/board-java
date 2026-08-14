@@ -26,7 +26,7 @@ public class Comment extends BaseEntity {
     private Comment parent;
 
     @Column(nullable = false)
-    private int depth = 0;
+    private byte depth = 0;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "board_id")
@@ -36,7 +36,8 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    protected Comment() {}
+    protected Comment() {
+    }
 
     // 일반 댓글
     public Comment(String content, Board board, Member member) {
@@ -77,5 +78,21 @@ public class Comment extends BaseEntity {
 
     public Member getMember() {
         return member;
+    }
+
+    public void changeContent(String content) {
+        this.content = content;
+    }
+
+    public Comment getParent() {
+        return parent;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Long getBoardId() {
+        return board.getId();
     }
 }

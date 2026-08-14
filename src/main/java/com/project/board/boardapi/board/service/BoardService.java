@@ -58,8 +58,8 @@ public class BoardService {
     public Page<BoardResponse> getPaged(int page, String keyword) {
         var pageable = PageRequest.of(page, PageConstants.DEFAULT_PAGE_SIZE, PageConstants.DEFAULT_SORT);
         Page<Board> boards = keyword == null || keyword.isBlank()
-                ? boardRepository.findAll(pageable)
-                : boardRepository.findByTitleContaining(keyword, pageable);
+                ? boardRepository.findAllByIsDeletedFalse(pageable)
+                : boardRepository.findByTitleContainingAndIsDeletedFalse(keyword, pageable);
         return boards.map(this::toResponse);
     }
 

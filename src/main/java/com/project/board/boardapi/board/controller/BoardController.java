@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -40,7 +39,7 @@ public class BoardController {
     @Operation(summary = "게시글 목록 조회", description = "게시글을 페이지 단위로 조회하며 제목 검색을 지원합니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공")
     @GetMapping
-    public ResponseEntity<Page<BoardResponse>> getPaged(
+    public ResponseEntity<BoardPageResponse> getPaged(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) String keyword) {
         return ResponseEntity.ok(boardService.getPaged(page, keyword));

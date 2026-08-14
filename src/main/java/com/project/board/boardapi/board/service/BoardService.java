@@ -3,6 +3,7 @@ package com.project.board.boardapi.board.service;
 import com.project.board.boardapi.board.domain.Board;
 import com.project.board.boardapi.board.dto.BoardCreateRequest;
 import com.project.board.boardapi.board.dto.BoardCreateResponse;
+import com.project.board.boardapi.board.dto.BoardPageResponse;
 import com.project.board.boardapi.board.dto.BoardResponse;
 import com.project.board.boardapi.board.dto.BoardUpdateRequest;
 import com.project.board.boardapi.board.exception.BoardAccessDeniedException;
@@ -55,12 +56,18 @@ public class BoardService {
         return toResponse(getBoard(id));
     }
 
-    public Page<BoardResponse> getPaged(int page, String keyword) {
+    public BoardPageResponse getPaged(int page, String keyword) {
         var pageable = PageRequest.of(page, PageConstants.DEFAULT_PAGE_SIZE, PageConstants.DEFAULT_SORT);
         Page<Board> boards = keyword == null || keyword.isBlank()
                 ? boardRepository.findAllByIsDeletedFalse(pageable)
                 : boardRepository.findByTitleContainingAndIsDeletedFalse(keyword, pageable);
-        return boards.map(this::toResponse);
+        Page<BoardResponse> responses = boards.map(this::toResponse);
+        return BoardPageResponse.of(
+                responses.getContent(),
+                responses.getNumber(),
+                responses.getSize(),
+                responses.getTotalElements()
+        );
     }
 
     private Board getBoard(Long id) {
